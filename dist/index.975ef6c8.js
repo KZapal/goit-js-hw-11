@@ -570,9 +570,6 @@ function showGallery(response) {
     </p>
   </div>
   </div>`);
-    if (response.data.totalHits <= page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
-    if (response.data.totalHits === page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
-    if (response.data.totalHits === 0) (0, _notiflixDefault.default).Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
 }
 submitBtn.addEventListener(`click`, (event)=>{
     event.preventDefault();
@@ -582,7 +579,9 @@ submitBtn.addEventListener(`click`, (event)=>{
     upBtn.style.display = `block`;
     fetchPictures(input.value, page, perPage).then((response)=>{
         showGallery(response);
-        (0, _notiflixDefault.default).Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
+        if (response.data.totalHits === 0) (0, _notiflixDefault.default).Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
+        else if (response.data.totalHits <= page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
+        else (0, _notiflixDefault.default).Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
     });
 });
 loadMore.addEventListener(`click`, (event)=>{
