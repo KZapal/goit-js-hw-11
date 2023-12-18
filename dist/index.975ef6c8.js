@@ -529,13 +529,13 @@ const fetchPictures = async ()=>{
         orientation: `horizontal`,
         safesearch: true,
         page: page,
-        perPage: perPage
+        per_page: perPage
     });
     try {
         const response = await (0, _axiosDefault.default).get(`/?${searchParams}`);
         return response;
     } catch (err) {
-        (0, _notiflixDefault.default).Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
+        response = 0;
     }
     console.log(response);
     const pictures = response.data.hits;
@@ -553,8 +553,7 @@ function cleanPictures() {
     gallery.innerHTML = "";
 }
 function showGallery(response) {
-    for(let i = 0; i < response.data.totalHits; i++){
-        if (response.data.hits[i]) gallery.insertAdjacentHTML(`beforeend`, `<div class="photo-card">
+    for(let i = 0; i <= response.data.totalHits; i++)if (response.data.hits[i]) gallery.insertAdjacentHTML(`beforeend`, `<div class="photo-card">
   <img src="${response.data.hits[i].webformatURL}" alt="${response.data.hits[i].tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
@@ -571,13 +570,13 @@ function showGallery(response) {
     </p>
   </div>
   </div>`);
-        if (response.data <= page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
-        if (response.data === page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
-    }
+    if (response.data.totalHits < page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
+    if (response.data.totalHits === page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
 }
 submitBtn.addEventListener(`click`, (event)=>{
     event.preventDefault();
     cleanPictures();
+    page = 1;
     loadMore.style.display = `block`;
     upBtn.style.display = `block`;
     fetchPictures(input.value, page, perPage).then((response)=>{

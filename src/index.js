@@ -26,16 +26,18 @@ const fetchPictures = async () => {
     orientation: `horizontal`,
     safesearch: true,
     page: page,
-    perPage: perPage,
+    per_page: perPage,
   });
 
   try {
     const response = await axios.get(`/?${searchParams}`);
     return response;
   } catch (err) {
-    Notiflix.Notify.failure(
-      `Sorry, there are no images matching your search query. Please try again.`
-    );
+    if ((response = 0)) {
+      Notiflix.Notify.failure(
+        `Sorry, there are no images matching your search query. Please try again.`
+      );
+    }
   }
 
   console.log(response);
@@ -58,7 +60,7 @@ function cleanPictures() {
 }
 
 function showGallery(response) {
-  for (let i = 0; i < response.data.totalHits; i++) {
+  for (let i = 0; i <= response.data.totalHits; i++) {
     if (response.data.hits[i]) {
       gallery.insertAdjacentHTML(
         `beforeend`,
@@ -81,22 +83,23 @@ function showGallery(response) {
   </div>`
       );
     }
-    if (response.data <= page * perPage) {
-      Notiflix.Notify.failure(
-        `We're sorry, but you've reached the end of search results.`
-      );
-    }
-    if (response.data === page * perPage) {
-      Notiflix.Notify.failure(
-        `We're sorry, but you've reached the end of search results.`
-      );
-    }
+  }
+  if (response.data.totalHits < page * perPage) {
+    Notiflix.Notify.failure(
+      `We're sorry, but you've reached the end of search results.`
+    );
+  }
+  if (response.data.totalHits === page * perPage) {
+    Notiflix.Notify.failure(
+      `We're sorry, but you've reached the end of search results.`
+    );
   }
 }
 
 submitBtn.addEventListener(`click`, event => {
   event.preventDefault();
   cleanPictures();
+  page = 1;
   loadMore.style.display = `block`;
   upBtn.style.display = `block`;
   fetchPictures(input.value, page, perPage).then(response => {
