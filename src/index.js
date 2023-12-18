@@ -25,6 +25,8 @@ const fetchPictures = async () => {
     image_type: `photo`,
     orientation: `horizontal`,
     safesearch: true,
+    page: page,
+    perPage: perPage,
   });
 
   try {

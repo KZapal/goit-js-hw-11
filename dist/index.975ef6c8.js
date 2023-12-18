@@ -527,7 +527,9 @@ const fetchPictures = async ()=>{
         q: input.value,
         image_type: `photo`,
         orientation: `horizontal`,
-        safesearch: true
+        safesearch: true,
+        page: page,
+        perPage: perPage
     });
     try {
         const response = await (0, _axiosDefault.default).get(`/?${searchParams}`);
