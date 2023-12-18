@@ -99,6 +99,7 @@ submitBtn.addEventListener(`click`, event => {
       Notiflix.Notify.failure(
         `We're sorry, but you've reached the end of search results.`
       );
+      Notiflix.Notify.info(`We found ${response.data.totalHits} images.`);
     } else {
       Notiflix.Notify.success(
         `Hooray! We found ${response.data.totalHits} images.`

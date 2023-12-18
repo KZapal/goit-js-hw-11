@@ -580,8 +580,10 @@ submitBtn.addEventListener(`click`, (event)=>{
     fetchPictures(input.value, page, perPage).then((response)=>{
         showGallery(response);
         if (response.data.totalHits === 0) (0, _notiflixDefault.default).Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
-        else if (response.data.totalHits <= page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
-        else (0, _notiflixDefault.default).Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
+        else if (response.data.totalHits <= page * perPage) {
+            (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
+            (0, _notiflixDefault.default).Notify.info(`We found ${response.data.totalHits} images.`);
+        } else (0, _notiflixDefault.default).Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
     });
 });
 loadMore.addEventListener(`click`, (event)=>{
