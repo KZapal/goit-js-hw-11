@@ -533,11 +533,11 @@ const fetchPictures = async ()=>{
     });
     try {
         const response = await (0, _axiosDefault.default).get(`/?${searchParams}`);
+        response;
         return response;
     } catch (err) {
-        response = 0;
+        (0, _notiflixDefault.default).Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
     }
-    console.log(response);
     const pictures = response.data.hits;
     return pictures.map((picture)=>({
             webformatURL: picture.webformatURL,
@@ -570,8 +570,9 @@ function showGallery(response) {
     </p>
   </div>
   </div>`);
-    if (response.data.totalHits < page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
+    if (response.data.totalHits <= page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
     if (response.data.totalHits === page * perPage) (0, _notiflixDefault.default).Notify.failure(`We're sorry, but you've reached the end of search results.`);
+    if (response.data.totalHits === 0) (0, _notiflixDefault.default).Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
 }
 submitBtn.addEventListener(`click`, (event)=>{
     event.preventDefault();

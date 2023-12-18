@@ -31,16 +31,13 @@ const fetchPictures = async () => {
 
   try {
     const response = await axios.get(`/?${searchParams}`);
+    response != 0;
     return response;
   } catch (err) {
-    if ((response = 0)) {
-      Notiflix.Notify.failure(
-        `Sorry, there are no images matching your search query. Please try again.`
-      );
-    }
+    Notiflix.Notify.failure(
+      `Sorry, there are no images matching your search query. Please try again.`
+    );
   }
-
-  console.log(response);
 
   const pictures = response.data.hits;
 
@@ -84,7 +81,7 @@ function showGallery(response) {
       );
     }
   }
-  if (response.data.totalHits < page * perPage) {
+  if (response.data.totalHits <= page * perPage) {
     Notiflix.Notify.failure(
       `We're sorry, but you've reached the end of search results.`
     );
@@ -92,6 +89,11 @@ function showGallery(response) {
   if (response.data.totalHits === page * perPage) {
     Notiflix.Notify.failure(
       `We're sorry, but you've reached the end of search results.`
+    );
+  }
+  if (response.data.totalHits === 0) {
+    Notiflix.Notify.failure(
+      `Sorry, there are no images matching your search query. Please try again.`
     );
   }
 }
